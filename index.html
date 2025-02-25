@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Rental Shops Map (Ward No 6)</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 600px;
+            width: 100%;
+        }
+
+        .popup-image {
+            max-width: 150px;  /* Adjust the size of the image */
+            max-height: 100px;
+            width: auto;
+            height: auto;
+        }
+
+        .popup-content {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        .popup-content b {
+            font-weight: bold;
+        }
+
+        /* Custom Marker Style (smaller size) */
+        .custom-marker {
+            width: 25px;         /* Smaller width */
+            height: 25px;        /* Smaller height */
+            border-radius: 50%;  /* Round shape */
+            background-color: #007bff;  /* Blue background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 12px;  /* Smaller font size */
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.6);  /* Text shadow for better visibility */
+            cursor: pointer;
+        }
+
+        /* Hover effect for smaller markers */
+        .custom-marker:hover {
+            background-color: #ff5722;  /* Change color on hover */
+            transform: scale(1.2);       /* Slightly enlarge the marker on hover */
+            transition: all 0.3s;        /* Smooth transition */
+        }
+
+        .popup-vehicle-icon {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Vehicle Rental Shops in Ward No 6, Lakeside, Pokhara</h1>
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        // Coordinates for Ward No 6, Lakeside, Pokhara
+        var wardCoordinates = [28.2086, 83.9869];  // Adjust as necessary
+
+        // Initialize the map and set the center to Ward No 6 area, with zoom level 15 (focus on the area)
+        var map = L.map('map').setView(wardCoordinates, 15); 
+
+        // Add a tile layer (OpenStreetMap)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Custom Icons for vehicles (use simple circle as a custom marker)
+        var carIcon = L.divIcon({
+            className: 'custom-marker',
+            html: '<span>C</span>',  // 'C' stands for Car
+            iconSize: [25, 25]  // Adjusted size to smaller
+        });
+
+        var bikeIcon = L.divIcon({
+            className: 'custom-marker',
+            html: '<span>B</span>',  // 'B' stands for Bike
+            iconSize: [25, 25]  // Adjusted size to smaller
+        });
+
+        // Array of rental shop data (coordinates, attributes, pricing, and photos)
+        var rentalShops = [
+            {
+                name: "Pokhara Car Rentals",
+                lat: 28.2098,
+                lon: 83.9860,
+                phone: "+977 1 1234567",
+                vehicles: "Cars, Bicycles",
+                description: "Offers a variety of vehicles for short-term and long-term rentals.",
+                amenities: "Free parking, GPS, Helmets available, Payment: Cash, Credit Card",
+                hours: "8 AM - 6 PM",
+                delivery: "Delivery available within Lakeside",
+                priceInsideValley: "Car: NPR 3000/day, Bike: NPR 500/day",
+                priceOutsideValley: "Car: NPR 5000/day, Bike: NPR 1000/day",
+                photo: "images/bi2.jpg",  // Correct relative path
+                icon: carIcon,
+            }
+            // Add more shops here...
+        ];
+
+        // Add markers for each rental shop
+        rentalShops.forEach(function(shop) {
+            var marker = L.marker([shop.lat, shop.lon], {icon: shop.icon}).addTo(map);
+
+            // Updated content without the vehicle icon in the popup
+            var popupContent = "<div class='popup-content'>" +
+                               "<b>" + shop.name + "</b><br>" +
+                               "Phone: " + shop.phone + "<br>" +
+                               "Vehicles: " + shop.vehicles + "<br>" +
+                               "Description: " + shop.description + "<br>" +
+                               "Amenities: " + shop.amenities + "<br>" +
+                               "Operating Hours: " + shop.hours + "<br>" +
+                               "Delivery: " + shop.delivery + "<br>" +
+                               "<b>Prices (Inside Valley):</b> " + shop.priceInsideValley + "<br>" +
+                               "<b>Prices (Outside Valley):</b> " + shop.priceOutsideValley + "<br>" +
+                               "<b>Photo:</b><br><img src='" + shop.photo + "' alt='" + shop.name + "' class='popup-image'><br>" +
+                               "</div>";
+
+            marker.bindPopup(popupContent);
+        });
+    </script>
+</body>
+</html>
